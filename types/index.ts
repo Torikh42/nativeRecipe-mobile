@@ -5,6 +5,7 @@ export interface Recipe {
   title: string;
   description: string;
   instructions: string;
+  image_url?: string;
 }
 
 export interface Ingredient {
