@@ -2,7 +2,6 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "../lib/supabaseClient";
 
-const API_URL = "process.env.EXPO_PUBLIC_API_URL/api";
 
 interface AuthContextType {
   user: User | null;
