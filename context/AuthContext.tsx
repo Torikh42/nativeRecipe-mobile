@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "../lib/supabaseClient";
 
-const API_URL = "http://192.168.1.7:3001/api";
+const API_URL = "process.env.EXPO_PUBLIC_API_URL/api";
 
 interface AuthContextType {
   user: User | null;
@@ -46,7 +46,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       if (data.session) {
-        await fetch(`${API_URL}/auth/logout`, {
+        await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/logout`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

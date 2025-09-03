@@ -1,5 +1,5 @@
 export interface Recipe {
-  id: number;
+  id: string;
   created_at: string;
   owner_id: string;
   title: string;
@@ -9,9 +9,9 @@ export interface Recipe {
 }
 
 export interface Ingredient {
-  id: number;
+  id: string;
   created_at: string;
-  recipe_id: number;
+  recipe_id: string;
   name: string;
   quantity: string;
 }

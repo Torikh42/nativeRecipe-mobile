@@ -5,15 +5,32 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { Stack, useRouter, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
+import { useEffect } from "react";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
-import { AuthProvider } from "../context/AuthContext";
+import { AuthProvider, useAuth } from "../context/AuthContext";
 import SafeScreen from "@/components/safeScreen";
 
 function InitialLayout() {
+  const { user, loading } = useAuth();
+  const segments = useSegments();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (loading) return;
+
+    const inAuthGroup = segments[0] === "(auth)";
+
+    if (user && inAuthGroup) {
+      router.replace("/(tabs)");
+    } else if (!user && !inAuthGroup) {
+      router.replace("/(auth)/login");
+    }
+  }, [user, loading, segments, router]);
+
   return (
     <SafeScreen>
       <Stack>
