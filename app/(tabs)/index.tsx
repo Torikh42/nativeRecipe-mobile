@@ -24,14 +24,15 @@ export default function App() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const { logout } = useAuth();
+  const { signOut } = useAuth();
 
   const handleLogout = async () => {
     try {
-      await logout();
+      await signOut();
       router.replace("/(auth)/login");
     } catch (e) {
-      const message = e instanceof Error ? e.message : "An unexpected error occurred.";
+      const message =
+        e instanceof Error ? e.message : "An unexpected error occurred.";
       Alert.alert("Logout Error", message);
     }
   };
@@ -68,9 +69,21 @@ export default function App() {
   }, [fetchRecipes]);
 
   const renderItem = ({ item }: { item: Recipe }) => (
-    <TouchableOpacity onPress={() => router.push({ pathname: "/recipe/[id]", params: { id: item.id.toString() } })}>
+    <TouchableOpacity
+      onPress={() =>
+        router.push({
+          pathname: "/recipe/[id]",
+          params: { id: item.id.toString() },
+        })
+      }
+    >
       <View className="bg-white overflow-hidden p-5 my-2 mx-4 rounded-xl shadow-lg border border-gray-200">
-        {item.image_url && <Image source={{ uri: item.image_url }} className="w-full h-48 rounded-lg mb-4" />}
+        {item.image_url && (
+          <Image
+            source={{ uri: item.image_url }}
+            className="w-full h-48 rounded-lg mb-4"
+          />
+        )}
         <Text className="text-xl font-bold text-gray-800">{item.title}</Text>
         <Text className="text-base text-gray-600 mt-2">{item.description}</Text>
       </View>
@@ -89,9 +102,16 @@ export default function App() {
   if (error && recipes.length === 0) {
     return (
       <View className="flex-1 justify-center items-center p-5 bg-orange-50">
-        <Text className="text-red-500 text-base mb-2 text-center">Error: {error}</Text>
-        <Text className="text-sm text-gray-600 text-center">Pastikan backend berjalan dan IP address sudah benar.</Text>
-        <TouchableOpacity onPress={onRefresh} className="mt-4 bg-blue-500 py-2 px-4 rounded-lg">
+        <Text className="text-red-500 text-base mb-2 text-center">
+          Error: {error}
+        </Text>
+        <Text className="text-sm text-gray-600 text-center">
+          Pastikan backend berjalan dan IP address sudah benar.
+        </Text>
+        <TouchableOpacity
+          onPress={onRefresh}
+          className="mt-4 bg-blue-500 py-2 px-4 rounded-lg"
+        >
           <Text className="text-white font-bold">Coba Lagi</Text>
         </TouchableOpacity>
       </View>
@@ -101,8 +121,13 @@ export default function App() {
   return (
     <SafeAreaView className="flex-1 bg-orange-50">
       <View className="flex-row justify-between items-center px-5 py-4 bg-white border-b border-gray-200 shadow-sm">
-        <Text className="text-2xl font-bold text-orange-600">Buku Resep Saya 🧑‍🍳</Text>
-        <TouchableOpacity onPress={handleLogout} className="bg-orange-500 py-2 px-3 rounded-lg">
+        <Text className="text-2xl font-bold text-orange-600">
+          Buku Resep Saya 🧑‍🍳
+        </Text>
+        <TouchableOpacity
+          onPress={handleLogout}
+          className="bg-orange-500 py-2 px-3 rounded-lg"
+        >
           <Text className="text-white font-bold">Logout</Text>
         </TouchableOpacity>
       </View>
@@ -112,12 +137,23 @@ export default function App() {
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={{ paddingVertical: 10 }}
-          refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} colors={[Colors.light.tint]} />}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={onRefresh}
+              colors={[Colors.light.tint]}
+            />
+          }
         />
       ) : (
         <View className="flex-1 justify-center items-center p-5">
-          <Text className="text-base text-gray-500">Belum ada resep yang ditambahkan.</Text>
-          <TouchableOpacity onPress={onRefresh} className="mt-4 bg-blue-500 py-2 px-4 rounded-lg">
+          <Text className="text-base text-gray-500">
+            Belum ada resep yang ditambahkan.
+          </Text>
+          <TouchableOpacity
+            onPress={onRefresh}
+            className="mt-4 bg-blue-500 py-2 px-4 rounded-lg"
+          >
             <Text className="text-white font-bold">Muat Ulang</Text>
           </TouchableOpacity>
         </View>

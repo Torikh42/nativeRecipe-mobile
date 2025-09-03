@@ -1,76 +1,87 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { User, Session } from "@supabase/supabase-js";
-import { supabase } from "../lib/supabaseClient";
+import { createContext, useContext, useState, useEffect } from "react";
+import * as SecureStore from "expo-secure-store";
+import { jwtDecode } from "jwt-decode";
 
+const TOKEN_KEY = "my-jwt";
 
-interface AuthContextType {
-  user: User | null;
-  session: Session | null;
-  loading: boolean;
-  logout: () => Promise<void>;
+interface UserPayload {
+  id: string;
+  email: string;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<{
+  signIn: (token: string) => void;
+  signOut: () => void;
+  token: string | null;
+  user: UserPayload | null;
+  isLoading: boolean;
+}>({
+  signIn: () => {},
+  signOut: () => {},
+  token: null,
+  user: null, 
+  isLoading: true,
+});
+
+export function useAuth() {
+  return useContext(AuthContext);
+}
+
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [token, setToken] = useState<string | null>(null);
+  const [user, setUser] = useState<UserPayload | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        setSession(session);
-        setUser(session?.user || null);
-        setLoading(false);
+
+    async function loadAuthData() {
+      try {
+        const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
+        if (storedToken) {
+          try {
+            const decodedUser = jwtDecode<UserPayload>(storedToken);
+            setToken(storedToken);
+            setUser(decodedUser);
+          } catch (decodeError) {
+            console.error("Failed to decode token from storage", decodeError);
+            await SecureStore.deleteItemAsync(TOKEN_KEY); 
+          }
+        }
+      } catch (e) {
+        console.error("Failed to load token from storage", e);
+      } finally {
+        setIsLoading(false);
       }
-    );
+    }
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user || null);
-      setLoading(false);
-    });
-
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
+    loadAuthData();
   }, []);
 
-  const logout = async () => {
+  const signIn = async (newToken: string) => {
     try {
-      const { data, error } = await supabase.auth.getSession();
-      if (error) {
-        console.error("Error getting session:", error);
-      }
-
-      if (data.session) {
-        await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/logout`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${data.session.access_token}`,
-          },
-        });
-      }
-    } catch (e) {
-      console.error("Error logging out from backend:", e);
-    } finally {
-      await supabase.auth.signOut();
+      const decodedUser = jwtDecode<UserPayload>(newToken);
+      setToken(newToken);
+      setUser(decodedUser);
+      await SecureStore.setItemAsync(TOKEN_KEY, newToken);
+    } catch (error) {
+      console.error("Failed to decode new token on sign-in:", error);
     }
   };
 
-  return (
-    <AuthContext.Provider value={{ user, session, loading, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
-}
+  const signOut = async () => {
+    setToken(null);
+    setUser(null); 
+    await SecureStore.deleteItemAsync(TOKEN_KEY);
+  };
 
-export function useAuth() {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
+  const value = {
+    signIn,
+    signOut,
+    token,
+    user,
+    isLoading,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

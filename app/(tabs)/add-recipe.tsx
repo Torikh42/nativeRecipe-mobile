@@ -10,7 +10,7 @@ import {
   Image,
 } from "react-native";
 import { useRouter } from "expo-router";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import * as ImagePicker from "expo-image-picker";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
@@ -30,7 +30,7 @@ export default function AddRecipeScreen() {
   const [image, setImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { session } = useAuth();
+  const { token, user } = useAuth(); 
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -69,7 +69,8 @@ export default function AddRecipeScreen() {
   const handleSubmit = async () => {
     setIsLoading(true);
 
-    if (!session?.access_token) {
+    // Menggunakan token untuk cek login
+    if (!token || !user?.id) {
       Alert.alert("Error", "Anda harus login untuk menambah resep.");
       setIsLoading(false);
       return;
@@ -98,6 +99,7 @@ export default function AddRecipeScreen() {
       description,
       instructions,
       ingredients,
+      owner_id: user.id, // Menambahkan owner_id dari user context
     };
 
     const formData = new FormData();
@@ -119,7 +121,7 @@ export default function AddRecipeScreen() {
         {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${session.access_token}`,
+            Authorization: `Bearer ${token}`,
           },
           body: formData,
         }
@@ -165,7 +167,11 @@ export default function AddRecipeScreen() {
           {/* Basic Info Section */}
           <View className="space-y-6">
             <View className="flex-row items-center space-x-3 mb-4">
-              <Ionicons name="document-text-outline" size={24} color={Colors.light.tint} />
+              <Ionicons
+                name="document-text-outline"
+                size={24}
+                color={Colors.light.tint}
+              />
               <Text className="text-xl font-semibold text-gray-800">
                 Informasi Dasar
               </Text>
@@ -204,7 +210,11 @@ export default function AddRecipeScreen() {
           {/* Image Upload Section */}
           <View className="space-y-4">
             <View className="flex-row items-center space-x-3 mb-4">
-              <Ionicons name="camera-outline" size={24} color={Colors.light.tint} />
+              <Ionicons
+                name="camera-outline"
+                size={24}
+                color={Colors.light.tint}
+              />
               <Text className="text-xl font-semibold text-gray-800">
                 Foto Resep
               </Text>
@@ -225,9 +235,7 @@ export default function AddRecipeScreen() {
                     className="bg-orange-500 rounded-lg px-6 py-2 mt-2"
                     onPress={pickImage}
                   >
-                    <Text className="text-white font-medium">
-                      Ganti Foto
-                    </Text>
+                    <Text className="text-white font-medium">Ganti Foto</Text>
                   </Pressable>
                 </View>
               ) : (
@@ -255,7 +263,11 @@ export default function AddRecipeScreen() {
           <View className="space-y-6">
             <View className="flex-row justify-between items-center">
               <View className="flex-row items-center space-x-3">
-                <Ionicons name="list-outline" size={24} color={Colors.light.tint} />
+                <Ionicons
+                  name="list-outline"
+                  size={24}
+                  color={Colors.light.tint}
+                />
                 <Text className="text-xl font-semibold text-gray-800">
                   Bahan-bahan
                 </Text>
@@ -276,7 +288,9 @@ export default function AddRecipeScreen() {
                   className="bg-orange-50 rounded-lg p-4 border border-gray-200"
                 >
                   <View className="flex-row items-center space-x-3">
-                    <Text className="text-lg font-semibold text-orange-600">{index + 1}.</Text>
+                    <Text className="text-lg font-semibold text-orange-600">
+                      {index + 1}.
+                    </Text>
                     <View className="flex-1 space-y-3">
                       <TextInput
                         className="border border-gray-200 rounded-lg px-3 py-2 text-gray-800 bg-white focus:border-orange-500"
@@ -318,7 +332,11 @@ export default function AddRecipeScreen() {
           {/* Instructions Section */}
           <View className="space-y-4">
             <View className="flex-row items-center space-x-3">
-              <Ionicons name="book-outline" size={24} color={Colors.light.tint} />
+              <Ionicons
+                name="book-outline"
+                size={24}
+                color={Colors.light.tint}
+              />
               <Text className="text-xl font-semibold text-gray-800">
                 Cara Memasak
               </Text>
@@ -340,7 +358,9 @@ export default function AddRecipeScreen() {
           {/* Action Buttons */}
           <View className="space-y-4 pt-6 border-t border-gray-200">
             <Pressable
-              className={`h-14 bg-orange-500 rounded-xl shadow-lg items-center justify-center ${isLoading ? "opacity-70" : ""}`}
+              className={`h-14 bg-orange-500 rounded-xl shadow-lg items-center justify-center ${
+                isLoading ? "opacity-70" : ""
+              }`}
               onPress={handleSubmit}
               disabled={isLoading}
             >
@@ -354,7 +374,9 @@ export default function AddRecipeScreen() {
               ) : (
                 <View className="flex-row items-center space-x-3">
                   <Ionicons name="save-outline" size={22} color="#fff" />
-                  <Text className="text-white font-semibold text-lg">Simpan Resep</Text>
+                  <Text className="text-white font-semibold text-lg">
+                    Simpan Resep
+                  </Text>
                 </View>
               )}
             </Pressable>

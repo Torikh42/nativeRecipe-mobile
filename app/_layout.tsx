@@ -15,12 +15,12 @@ import { AuthProvider, useAuth } from "../context/AuthContext";
 import SafeScreen from "@/components/safeScreen";
 
 function InitialLayout() {
-  const { user, loading } = useAuth();
+  const { user, isLoading } = useAuth();
   const segments = useSegments();
   const router = useRouter();
 
   useEffect(() => {
-    if (loading) return;
+    if (isLoading) return;
 
     const inAuthGroup = segments[0] === "(auth)";
 
@@ -29,7 +29,7 @@ function InitialLayout() {
     } else if (!user && !inAuthGroup) {
       router.replace("/(auth)/login");
     }
-  }, [user, loading, segments, router]);
+  }, [user, isLoading, segments, router]);
 
   return (
     <SafeScreen>

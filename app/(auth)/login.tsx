@@ -3,22 +3,21 @@ import {
   View,
   Text,
   TextInput,
+  ActivityIndicator,
   Alert,
   TouchableOpacity,
-  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import { Link, useRouter } from "expo-router";
-import { supabase } from "../../lib/supabaseClient";
-
-
+import { Link, useRouter } from "expo-router"; 
+import { useAuth } from "@/context/AuthContext";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
+  const router = useRouter(); 
+  const { signIn } = useAuth(); 
 
   const handleLogin = async () => {
     setLoading(true);
@@ -33,23 +32,12 @@ export default function LoginScreen() {
 
       const data = await response.json();
 
-      type LoginResponse = { error?: string; session?: any };
-      const loginData = data as LoginResponse;
-
-      if (!response.ok) {
-        throw new Error(loginData.error || "Login gagal.");
+      if (!response.ok || !data.token) {
+        throw new Error(data.message || "Email atau password salah.");
       }
+      signIn(data.token);
+      router.replace("/"); 
 
-      if (loginData.session) {
-        const { error: setSessionError } = await supabase.auth.setSession(
-          loginData.session
-        );
-        if (setSessionError) {
-          throw new Error(setSessionError.message);
-        }
-      }
-
-      router.replace("/");
     } catch (error) {
       if (error instanceof Error) {
         Alert.alert("Login Gagal", error.message);

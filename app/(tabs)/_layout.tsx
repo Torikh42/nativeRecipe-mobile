@@ -3,9 +3,14 @@ import React from "react";
 import { HapticTab } from "@/components/HapticTab";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import { Colors } from "@/constants/Colors";
-import { Ionicons } from "@expo/vector-icons"; // <-- TAMBAHKAN INI
+import { useAuth } from "@/context/AuthContext";
 
 export default function TabLayout() {
+  const { token, isLoading } = useAuth(); 
+  if (isLoading) {
+    return null; 
+  }
+
   return (
     <Tabs
       screenOptions={{
@@ -29,14 +34,28 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen
-        name="add-recipe"
-        options={{
-          tabBarIcon: ({ color }: { color: string }) => (
-            <Ionicons name="add-circle" size={28} color={color} />
-          ),
-        }}
-      />
+      {token && ( 
+        <>
+          <Tabs.Screen
+            name="dashboard" 
+            options={{
+              title: "Dashboard",
+              tabBarIcon: ({ color }: { color: string }) => (
+                <IconSymbol size={28} name="person" color={color} />
+              ),
+            }}
+          />
+          <Tabs.Screen
+            name="add-recipe"
+            options={{
+              title: "Tambah Resep",
+              tabBarIcon: ({ color }: { color: string }) => (
+                <IconSymbol size={28} name="plus.circle" color={color} />
+              ),
+            }}
+          />
+        </>
+      )}
       <Tabs.Screen name="recipe/[id]" options={{ href: null }} />
     </Tabs>
   );
