@@ -30,7 +30,7 @@ export default function AddRecipeScreen() {
   const [image, setImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { token, user } = useAuth(); 
+  const { token, user } = useAuth();
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({

@@ -19,7 +19,7 @@ const AuthContext = createContext<{
   signIn: () => {},
   signOut: () => {},
   token: null,
-  user: null, 
+  user: null,
   isLoading: true,
 });
 
@@ -27,14 +27,12 @@ export function useAuth() {
   return useContext(AuthContext);
 }
 
-
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<UserPayload | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-
     async function loadAuthData() {
       try {
         const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
@@ -45,7 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setUser(decodedUser);
           } catch (decodeError) {
             console.error("Failed to decode token from storage", decodeError);
-            await SecureStore.deleteItemAsync(TOKEN_KEY); 
+            await SecureStore.deleteItemAsync(TOKEN_KEY);
           }
         }
       } catch (e) {
@@ -71,7 +69,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signOut = async () => {
     setToken(null);
-    setUser(null); 
+    setUser(null);
     await SecureStore.deleteItemAsync(TOKEN_KEY);
   };
 

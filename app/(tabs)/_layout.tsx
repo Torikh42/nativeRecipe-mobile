@@ -6,9 +6,9 @@ import { Colors } from "@/constants/Colors";
 import { useAuth } from "@/context/AuthContext";
 
 export default function TabLayout() {
-  const { token, isLoading } = useAuth(); 
+  const { token, isLoading } = useAuth();
   if (isLoading) {
-    return null; 
+    return null;
   }
 
   return (
@@ -34,10 +34,10 @@ export default function TabLayout() {
           ),
         }}
       />
-      {token && ( 
+      {token && (
         <>
           <Tabs.Screen
-            name="dashboard" 
+            name="dashboard"
             options={{
               title: "Dashboard",
               tabBarIcon: ({ color }: { color: string }) => (

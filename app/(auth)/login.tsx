@@ -9,26 +9,29 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import { Link, useRouter } from "expo-router"; 
+import { Link, useRouter } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter(); 
-  const { signIn } = useAuth(); 
+  const router = useRouter();
+  const { signIn } = useAuth();
 
   const handleLogin = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await fetch(
+        `${process.env.EXPO_PUBLIC_API_URL}/api/auth/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
       const data = await response.json();
 
@@ -36,8 +39,7 @@ export default function LoginScreen() {
         throw new Error(data.message || "Email atau password salah.");
       }
       signIn(data.token);
-      router.replace("/"); 
-
+      router.replace("/");
     } catch (error) {
       if (error instanceof Error) {
         Alert.alert("Login Gagal", error.message);
@@ -56,7 +58,9 @@ export default function LoginScreen() {
     >
       <View className="flex-1 justify-center items-center p-5 bg-orange-50">
         <View className="w-full max-w-md bg-white p-6 rounded-2xl shadow-lg">
-          <Text className="text-3xl font-bold mb-6 text-center text-orange-600">Masuk Akun</Text>
+          <Text className="text-3xl font-bold mb-6 text-center text-orange-600">
+            Masuk Akun
+          </Text>
           <TextInput
             className="w-full p-4 border border-gray-200 rounded-lg mb-4 bg-gray-50 text-gray-800 focus:border-orange-500"
             placeholder="Email"
@@ -85,7 +89,10 @@ export default function LoginScreen() {
               <Text className="text-white text-lg font-bold">Login</Text>
             )}
           </TouchableOpacity>
-          <Link href="../signup" className="mt-5 text-orange-600 text-base text-center">
+          <Link
+            href="../signup"
+            className="mt-5 text-orange-600 text-base text-center"
+          >
             Belum punya akun? Daftar
           </Link>
         </View>
