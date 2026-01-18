@@ -1,9 +1,9 @@
-import { Tabs } from "expo-router";
-import React from "react";
 import { HapticTab } from "@/components/HapticTab";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import { Colors } from "@/constants/Colors";
 import { useAuth } from "@/context/AuthContext";
+import { Tabs } from "expo-router";
+import React from "react";
 
 export default function TabLayout() {
   const { token, isLoading } = useAuth();
@@ -51,6 +51,15 @@ export default function TabLayout() {
               title: "Tambah Resep",
               tabBarIcon: ({ color }: { color: string }) => (
                 <IconSymbol size={28} name="plus.circle" color={color} />
+              ),
+            }}
+          />
+          <Tabs.Screen
+            name="ai-chef"
+            options={{
+              title: "Magic Chef",
+              tabBarIcon: ({ color }: { color: string }) => (
+                <IconSymbol size={28} name="sparkles" color={color} />
               ),
             }}
           />

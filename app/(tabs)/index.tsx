@@ -1,17 +1,17 @@
-import React, { useEffect, useState, useCallback } from "react";
-import {
-  Text,
-  View,
-  FlatList,
-  ActivityIndicator,
-  SafeAreaView,
-  Alert,
-  TouchableOpacity,
-  Image,
-  RefreshControl,
-} from "react-native";
 import { Recipe } from "@/types";
 import { useRouter } from "expo-router";
+import React, { useCallback, useEffect, useState } from "react";
+import {
+    ActivityIndicator,
+    Alert,
+    FlatList,
+    Image,
+    RefreshControl,
+    SafeAreaView,
+    Text,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import { useAuth } from "../../context/AuthContext";
 
 import { Colors } from "@/constants/Colors";
@@ -70,6 +70,7 @@ export default function App() {
 
   const renderItem = ({ item }: { item: Recipe }) => (
     <TouchableOpacity
+      activeOpacity={0.9}
       onPress={() =>
         router.push({
           pathname: "/recipe/[id]",
@@ -77,15 +78,24 @@ export default function App() {
         })
       }
     >
-      <View className="bg-white overflow-hidden p-5 my-2 mx-4 rounded-xl shadow-lg border border-gray-200">
-        {item.image_url && (
+      <View className="bg-surface overflow-hidden mb-6 rounded-3xl shadow-sm border border-gray-50 pb-4">
+        {item.image_url ? (
           <Image
             source={{ uri: item.image_url }}
-            className="w-full h-48 rounded-lg mb-4"
+            className="w-full h-56"
+            resizeMode="cover"
           />
+        ) : (
+          <View className="w-full h-56 bg-gray-100 items-center justify-center">
+             <Text className="text-gray-300">No Image</Text>
+          </View>
         )}
-        <Text className="text-xl font-bold text-gray-800">{item.title}</Text>
-        <Text className="text-base text-gray-600 mt-2">{item.description}</Text>
+        <View className="px-5 pt-4">
+          <Text className="text-xl font-bold text-secondary mb-1">{item.title}</Text>
+          <Text className="text-sm text-gray-500 line-clamp-2" numberOfLines={2}>
+            {item.description}
+          </Text>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -119,40 +129,48 @@ export default function App() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-orange-50">
-      <View className="flex-row justify-between items-center px-5 py-4 bg-white border-b border-gray-200 shadow-sm">
-        <Text className="text-2xl font-bold text-orange-600">
-          Buku Resep Saya 🧑‍🍳
-        </Text>
+    <SafeAreaView className="flex-1 bg-background">
+      <View className="flex-row justify-between items-center px-6 py-6 bg-surface shadow-sm mb-2">
+        <View>
+          <Text className="text-2xl font-bold text-secondary">
+            Jelajahi Resep
+          </Text>
+          <Text className="text-gray-500">Temukan inspirasi memasak hari ini</Text>
+        </View>
         <TouchableOpacity
           onPress={handleLogout}
-          className="bg-orange-500 py-2 px-3 rounded-lg"
+          className="bg-accent p-2 rounded-full"
         >
-          <Text className="text-white font-bold">Logout</Text>
+          {/* Simple logout icon placeholder or text if no icon lib available */}
+          <Text className="text-primary font-bold text-xs px-2">Keluar</Text>
         </TouchableOpacity>
       </View>
+
       {recipes.length > 0 ? (
         <FlatList
           data={recipes}
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
-          contentContainerStyle={{ paddingVertical: 10 }}
+          contentContainerStyle={{ paddingVertical: 10, paddingHorizontal: 16 }}
           refreshControl={
             <RefreshControl
               refreshing={isRefreshing}
               onRefresh={onRefresh}
-              colors={[Colors.light.tint]}
+              colors={["#FF6B6B"]}
             />
           }
         />
       ) : (
         <View className="flex-1 justify-center items-center p-5">
-          <Text className="text-base text-gray-500">
-            Belum ada resep yang ditambahkan.
+          <Text className="text-lg font-bold text-gray-400 mb-2">
+            Belum ada resep.
+          </Text>
+          <Text className="text-base text-gray-500 text-center mb-6">
+            Mulai tambahkan resep pertamamu sekarang!
           </Text>
           <TouchableOpacity
             onPress={onRefresh}
-            className="mt-4 bg-blue-500 py-2 px-4 rounded-lg"
+            className="bg-primary py-3 px-6 rounded-full shadow-lg shadow-orange-200"
           >
             <Text className="text-white font-bold">Muat Ulang</Text>
           </TouchableOpacity>
