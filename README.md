@@ -1,50 +1,40 @@
-# Welcome to your Expo app 👋
+# NativeRecipe Mobile App 📱
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A premium, cross-platform mobile application for discovering and managing recipes, built with Expo and React Native.
 
-## Get started
+## ✨ Key Features
 
-1. Install dependencies
+-   **Magic Chef AI 🧞‍♂️**: Generate unique recipes just by inputting ingredients you have at home. Powered by Gemini/DeepSeek models.
+-   **Premium Design**: A modern, vibrant "Coral & Cream" aesthetic with smooth animations and clean typography.
+-   **Recipe Management**: Browse, view, and add your favorite recipes.
+-   **Authentication**: Secure login and signup.
 
-   ```bash
-   npm install
-   ```
+## 🛠 Tech Stack
 
-2. Start the app
+-   **Framework**: Expo (React Native)
+-   **Routing**: Expo Router
+-   **Styling**: NativeWind (TailwindCSS)
+-   **Icons**: SF Symbols (via IconSymbol)
 
-   ```bash
-   npx expo start
-   ```
+## 🚀 Getting Started
 
-In the output, you'll find options to open the app in a
+1.  **Install Dependencies**:
+    ```bash
+    npm install
+    ```
+2.  **Environment Setup**:
+    Create a `.env` file (copy from `.env.example`):
+    ```env
+    EXPO_PUBLIC_SUPABASE_URL=...
+    EXPO_PUBLIC_SUPABASE_ANON_KEY=...
+    EXPO_PUBLIC_API_URL=http://your-local-ip:3001  # Point to your backend
+    ```
+3.  **Run the App**:
+    ```bash
+    npx expo start --clear
+    ```
+4.  **Test on Device**:
+    Scan the QR code with Expo Go (Android/iOS).
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## 📸 AI Features
+Navigate to the "Magic Chef" tab to experience the AI recipe generation.
