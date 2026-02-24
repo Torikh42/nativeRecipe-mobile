@@ -34,38 +34,38 @@ export default function TabLayout() {
           ),
         }}
       />
-      {token && (
-        <>
-          <Tabs.Screen
-            name="dashboard"
-            options={{
-              title: "Dashboard",
-              tabBarIcon: ({ color }: { color: string }) => (
-                <IconSymbol size={28} name="person" color={color} />
-              ),
-            }}
-          />
-          <Tabs.Screen
-            name="add-recipe"
-            options={{
-              title: "Tambah Resep",
-              tabBarIcon: ({ color }: { color: string }) => (
-                <IconSymbol size={28} name="plus.circle" color={color} />
-              ),
-            }}
-          />
-          <Tabs.Screen
-            name="ai-chef"
-            options={{
-              title: "Magic Chef",
-              tabBarIcon: ({ color }: { color: string }) => (
-                <IconSymbol size={28} name="sparkles" color={color} />
-              ),
-            }}
-          />
-        </>
-      )}
+      <Tabs.Screen
+        name="dashboard"
+        options={{
+          title: "Dashboard",
+          href: token ? "/dashboard" : null,
+          tabBarIcon: ({ color }: { color: string }) => (
+            <IconSymbol size={28} name="person" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="add-recipe"
+        options={{
+          title: "Tambah Resep",
+          href: token ? "/add-recipe" : null,
+          tabBarIcon: ({ color }: { color: string }) => (
+            <IconSymbol size={28} name="plus.circle" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="ai-chef"
+        options={{
+          title: "Magic Chef",
+          href: token ? "/ai-chef" : null,
+          tabBarIcon: ({ color }: { color: string }) => (
+            <IconSymbol size={28} name="sparkles" color={color} />
+          ),
+        }}
+      />
       <Tabs.Screen name="recipe/[id]" options={{ href: null }} />
     </Tabs>
   );
 }
+
