@@ -4,37 +4,52 @@ A premium, cross-platform mobile application for discovering and managing recipe
 
 ## ✨ Key Features
 
--   **Magic Chef AI 🧞‍♂️**: Generate unique recipes just by inputting ingredients you have at home. Powered by Gemini/DeepSeek models.
--   **Premium Design**: A modern, vibrant "Coral & Cream" aesthetic with smooth animations and clean typography.
--   **Recipe Management**: Browse, view, and add your favorite recipes.
--   **Authentication**: Secure login and signup.
+-   **🍳 Magic Chef AI**: Generate unique recipes just by inputting ingredients you have at home, powered by Google Gemini.
+-   **💎 Premium Design**: A modern, vibrant "Coral & Cream" aesthetic with smooth animations and clean typography using NativeWind.
+-   **📖 Recipe Management**: Browse, view, and add your favorite recipes on the go.
+-   **🖼️ Image Uploads**: Direct integration for capturing and uploading recipe photos.
+-   **🔒 Secure Auth**: Seamless login and signup experience.
 
 ## 🛠 Tech Stack
 
--   **Framework**: Expo (React Native)
--   **Routing**: Expo Router
--   **Styling**: NativeWind (TailwindCSS)
--   **Icons**: SF Symbols (via IconSymbol)
+-   **Framework**: [Expo](https://expo.dev/) (React Native)
+-   **Routing**: Expo Router (File-based)
+-   **Styling**: [NativeWind](https://www.nativewind.dev/) (Tailwind CSS for React Native)
+-   **Icons**: SF Symbols / Lucide (via IconSymbol)
+-   **Storage**: Cloudflare R2 via Backend API
+-   **Database**: Supabase
 
 ## 🚀 Getting Started
 
-1.  **Install Dependencies**:
+### Prerequisites
+
+-   Node.js 20+
+-   Expo Go app installed on your physical device
+
+### Installation
+
+1.  Navigate to the `mobile2` directory:
+    ```bash
+    cd mobile2
+    ```
+2.  Install dependencies:
     ```bash
     npm install
     ```
-2.  **Environment Setup**:
-    Create a `.env` file (copy from `.env.example`):
+3.  Configure environment variables in `.env`:
     ```env
-    EXPO_PUBLIC_SUPABASE_URL=...
-    EXPO_PUBLIC_SUPABASE_ANON_KEY=...
-    EXPO_PUBLIC_API_URL=http://your-local-ip:3001  # Point to your backend
+    EXPO_PUBLIC_SUPABASE_URL=your_supabase_url
+    EXPO_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+    EXPO_PUBLIC_API_URL=http://your-local-ip:3001
     ```
-3.  **Run the App**:
-    ```bash
-    npx expo start --clear
-    ```
-4.  **Test on Device**:
-    Scan the QR code with Expo Go (Android/iOS).
+    *Note: Use your machine's local IP address instead of `localhost` for testing on physical devices.*
 
-## 📸 AI Features
-Navigate to the "Magic Chef" tab to experience the AI recipe generation.
+### Running the App
+
+```bash
+npx expo start
+```
+Scan the QR code with your camera (iOS) or Expo Go app (Android).
+
+## 🤖 AI Chef
+Navigate to the **AI Chef** tab (✨ icon) to experience the Gemini-powered cooking assistant.
