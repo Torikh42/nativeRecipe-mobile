@@ -64,6 +64,16 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="subscription"
+        options={{
+          title: "Pro Chef",
+          href: "/subscription",
+          tabBarIcon: ({ color }: { color: string }) => (
+            <IconSymbol size={28} name="diamond" color={color} />
+          ),
+        }}
+      />
       <Tabs.Screen name="recipe/[id]" options={{ href: null }} />
     </Tabs>
   );
